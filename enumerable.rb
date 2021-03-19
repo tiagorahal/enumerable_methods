@@ -19,65 +19,100 @@ module Enumerable
   end
 
   def my_select
-    length.times do |x|
-      puts self[x] if yield(self[x])
+    return enum_for(:my_select) unless block_given?
+
+    arr = []
+    to_a.length.times do |x|
+      arr.push(self[x]) if yield(self[x])
     end
+    arr
   end
 
-  def my_all?
-    length.times do |x|
-      return false if yield(self[x]) != true
+  def my_all?(param = nil)
+    if block_given?
+      to_a.my_each { |n| return false unless yield(n) }
+    elsif param.nil?
+      to_a.my_each { |n| return false if !n || n.nil? }
+    elsif !param.nil? && (param.is_a? Class)
+      to_a.my_each { |n| return false unless [n.class, n.class.superclass, n.class.superclass].include?(param) }
+    elsif !param.nil? && (param.is_a? Regexp)
+      to_a.my_each { |n| return false unless n.match(param) }
+    else
+      to_a.my_each { |n| return false unless n == param }
     end
     true
   end
 
-  def my_any?
-    length.times do |x|
-      return true if yield(self[x])
+  def my_any?(param = nil)
+    if block_given?
+      to_a.my_each { |n| return true if yield(n) }
+    elsif param.nil?
+      to_a.my_each { |n| return true if n }
+    elsif !param.nil? && (param.is_a? Class)
+      to_a.my_each { |n| return true if [n.class, n.class.superclass, n.class.superclass].include?(param) }
+    elsif !param.nil? && (param.is_a? Regexp)
+      to_a.my_each { |n| return true if n.match(param) }
+    else
+      to_a.my_each { |n| return true if n == param }
     end
     false
   end
 
-  def my_none?
-    length.times do |x|
-      return false if yield(self[x])
+  def my_none?(param = nil)
+    if block_given?
+      my_each { |n| return false if yield(n) }
+    elsif param.nil?
+      to_a.my_each { |n| return false if n }
+    elsif !param.nil? && (param.is_a? Class)
+      my_each { |n| return false if [n.class, n.class.superclass, n.class.superclass].include?(param) }
+    elsif !param.nil? && (param.is_a? Regexp)
+      my_each { |n| return false if n.match(param) }
+    else
+      my_each { |n| return false if n == param }
     end
     true
   end
 
-  def my_count
+  def my_count(param = nil)
     counter = 0
-    length.times do |x|
-      counter += 1 if yield(self[x])
+    if block_given?
+      my_each { |n| counter += 1 if yield(n) }
+    elsif param.nil?
+      my_each { |_n| counter += 1 }
+    else
+      my_each { |n| counter += 1 if n == param }
     end
     counter
   end
 
   def my_map(proc = nil)
-    new_arr = []
-    if proc
-      length.times do |x|
-        new_arr[x] = proc.call(self[x])
-      end
+    return enum_for(:my_map, proc) unless !proc.nil? || block_given?
+
+    arr = []
+    if proc.nil?
+      to_a.my_each { |item| arr << yield(item) }
     else
-      length.times do |x|
-        new_arr[x] = yield(self[x])
-      end
+      to_a.my_each { |item| arr << proc.call(item) }
     end
-    puts new_arr
+    arr
   end
 
-  def my_inject(arr = 0)
-    acum = arr
-    length.times do |x|
-      acum = yield(acum, self[x])
+  def my_inject(result = nil, symbol = nil)
+    if (result.is_a?(Symbol) || result.is_a?(String)) && (!result.nil? && symbol.nil?)
+      symbol = result
+      result = nil
     end
-    acum
+    if !block_given? && !symbol.nil?
+      to_a.my_each { |n| result = result.nil? ? n : result.send(symbol, n) }
+    else
+      to_a.my_each { |n| result = result.nil? ? n : yield(result, n) }
+    end
+    result
   end
+end
 
-  def multiply_els
-    my_inject(1) do |k, x|
-      k * x
-    end
+def multiply_els
+  my_inject(1) do |k, x|
+    k * x
   end
 end

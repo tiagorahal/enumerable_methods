@@ -4,11 +4,16 @@ AllCops:
     - "Guardfile"
     - "Rakefile"
     - "node_modules/**/*"
+    - "Style/CaseEquality"
 
   DisplayCopNames: true
 
 Layout/LineLength:
   Max: 120
+Metrics/PerceivedComplexity:
+  Max: 100
+Metrics/CyclomaticComplexity:
+  Max: 100
 Metrics/MethodLength:
   Max: 20
 Metrics/AbcSize:
