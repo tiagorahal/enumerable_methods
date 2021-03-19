@@ -11,6 +11,8 @@ module Enumerable
   end
 
   def my_each_with_index
+    return enum_for(:my_each_with_index) unless block_given?
+
     length.times do |x|
       yield(self[x], x)
     end
