@@ -3,7 +3,7 @@
 
 ## enumerable_methods
 
-> This is a project made with ruby to sort items inside of an array, it is composed of two methods. The first one sorts numerical items, and the other one sorts strings according to their number of letters, by using building blocks.
+> A collaborative project to build user defined ruby's enumerable methods
 
 
 
@@ -37,7 +37,7 @@ Setup by  following the installation instructions below :
 Run the following command into your terminal:
 
 ```console
-git clone https://github.com/Emmyn5600/bubble-sort.git
+git clone https://github.com/tiagorahal/enumerable_methods.git
 ```
 
 ### Usage
@@ -45,7 +45,7 @@ git clone https://github.com/Emmyn5600/bubble-sort.git
 Run the following command into your terminal:
 
 ```console
-ruby bubble_sort.rb
+ruby enumerable.rb
 ```
 
 ## Authors
@@ -66,7 +66,7 @@ ruby bubble_sort.rb
 
 Contributions, issues, and feature requests are welcome!
 
-Feel free to check the [issues page](https://github.com/Emmyn5600/bubble-sort/issues).
+Feel free to check the [issues page](https://github.com/tiagorahal/enumerable_methods/issues).
 
 ## Show your support
 
