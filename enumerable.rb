@@ -1,8 +1,12 @@
 module Enumerable
   def my_each
-    length.times do |x|
-      yield(self[x])
+    return enum_for(:my_each) unless block_given?
+    i = 0
+    while i < to_a.length
+      yield(to_a[i])
+      i += 1
     end
+    self
   end
 
   def my_each_with_index
