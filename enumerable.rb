@@ -11,20 +11,20 @@ module Enumerable
   end
 
   def my_each_with_index
-    return enum_for(:my_each_with_index) unless block_given?
+    return to_enum(:my_each_with_index) unless block_given?
 
-    length.times do |x|
-      yield(self[x], x)
+    i = 0
+    while i < to_a.length
+      yield(to_a[i], i)
+      i += 1
     end
+    self
   end
 
   def my_select
     return enum_for(:my_select) unless block_given?
-
     arr = []
-    to_a.length.times do |x|
-      arr.push(self[x]) if yield(self[x])
-    end
+    to_a.my_each { |n| arr.push(n) if yield(n) }
     arr
   end
 
@@ -111,8 +111,6 @@ module Enumerable
   end
 end
 
-def multiply_els
-  my_inject(1) do |k, x|
-    k * x
-  end
+def multiply_els(arr)
+  arr.my_inject(:*)
 end
