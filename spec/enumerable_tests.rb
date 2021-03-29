@@ -112,4 +112,37 @@ RSpec.describe Enumerable do
       expect(number_array.my_any? {|number| number > 5}).to be false
     end
   end
+
+  describe '#my_none?' do
+
+    it 'returns true if we do not have a block' do
+        expect(arr.my_none?).to be true
+      end
+
+      it 'returns a false if we do have a false element' do
+        expect(false_arr.my_none?).to be false
+     end
+     
+     it 'returns true if the all elements are odd numbers' do
+       expect(true_arr.my_none?{|number| number if number.odd?}).to be true
+     end
+ 
+     it 'return true if the all elements in the array matches the class' do
+       expect(number_array.my_none?(Numeric)).to eql(true)
+     end
+ 
+     it 'returns true if the all elements contains letter a' do 
+       expect(array.my_none?(/a/)).to eql(true)
+     end
+ 
+     it 'returns a true if the elements in the array matches with parameter' do
+       expect(['microverse'].my_none?('microverse')).to be true
+     end
+ 
+     it 'returns a false if the elements in the array does not matches with parameter' do
+       expect(['microverse'].my_none?('microverseschool')).to be false
+     end
+   
+     
+  end
 end
