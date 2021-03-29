@@ -1,75 +1,87 @@
-require_relative "../enumerable"
+require_relative '../enumerable'
 
 RSpec.describe Enumerable do
-  let(:array) {%w[apple Orange Watermelon Banana]}
-  let(:hash) {{fruit: 'banana', phone: 'apple'}}
-  let(:number_array) {[1, 2, 3, 4]}
-  let(:arr) {[]}
-  let(:false_arr){[false]}
-  let(:true_arr){[1,3,5]}
+  let(:array) { %w[apple Orange Watermelon Banana] }
+  let(:hash) { { fruit: 'banana', phone: 'apple' } }
+  let(:number_array) { [1, 2, 3, 4] }
+  let(:arr) { [] }
+  let(:false_arr) { [false] }
+  let(:true_arr) { [1, 3, 5] }
 
   describe '#my_each' do
-
     it 'returns the array' do
-      expect(array.my_each {|fruit| fruit}).to eql(array)
+      expect(array.my_each { |fruit| fruit }).to eql(array)
     end
 
-    it 'returns the array after the numbers are double' do
-      expect(number_array.my_each {|number| number*2}).to eql(number_array.each {|number| number*2})
+    it 'returns the numbers if they are even' do
+      expect(number_array.my_each do |number|
+               number if number.even?
+             end).to eql(number_array.each do |number|
+                           number if number.even?
+                         end)
     end
 
     it 'my_each when self is a hash' do
-      expect(hash.each { |key, value| "k: #{key}, v: #{value}" }).to eql({:fruit=>'banana', :phone=>'apple'})
+      expect(hash.my_each do |keys, value|
+               keys if value == 'banana'
+             end).to eql(hash.each do |keys, value|
+                           keys if value == 'banana'
+                         end)
     end
-
   end
 
   describe '#my_each_with_index' do
-
     it 'returns the doubled indexes for an array' do
-      expect(number_array.my_each_with_index {|number, index| index*2}).to eql(number_array.each_with_index{|number, index| index*2})
+      expect(number_array.my_each_with_index do |_number, index|
+               index * 2
+             end).to eql(number_array.each_with_index do |_number, index|
+                           index * 2
+                         end)
     end
 
     it 'return all elements that are even index' do
-     expect(number_array.my_each_with_index {|number, index| number if index % 2 == 0}).to eql(number_array.each_with_index{|number, index| number if index % 2 == 0})
+      expect(number_array.my_each_with_index do |number, index|
+               number if index.even?
+             end).to eql(number_array.each_with_index do |number, index|
+                           number if index.even?
+                         end)
     end
-    
+
     it 'return hash if an index for key is 1' do
-    expect(hash.my_each_with_index {|hash, index| hash if index ==  1}).to eql(hash.each_with_index {|hash, index| hash if index ==  1})
+      expect(hash.my_each_with_index { |hash, index| hash if index == 1 }).to eql(hash.each_with_index do |hash, index|
+                                                                                    hash if index == 1
+                                                                                  end)
     end
-    
   end
 
   describe '#my_select' do
-    
     it 'return elements that have 6 letters' do
-      expect(array.my_select {|word| word if word.length == 6}).to eq(['Orange', 'Banana'])
+      expect(array.my_select { |word| word if word.length == 6 }).to eq(%w[Orange Banana])
     end
 
     it 'returns all the numbers divisible by 2' do
-      expect(number_array.my_select {|number| number if number.even?}).to eq([2, 4])
+      expect(number_array.my_select { |number| number if number.even? }).to eq([2, 4])
     end
   end
 
   describe '#my_all' do
-     
     it 'returns true if we do not have a block' do
-    expect(arr.my_all?).to be true
+      expect(arr.my_all?).to be true
     end
-    
+
     it 'returns a false if we do have a false element' do
-       expect(false_arr.my_all?).to be false
+      expect(false_arr.my_all?).to be false
     end
-    
+
     it 'returns true if the all elements are odd numbers' do
-      expect(true_arr.my_all? {|number| number if number.odd?}).to be true
+      expect(true_arr.my_all? { |number| number if number.odd? }).to be true
     end
 
     it 'return true if the all elements in the array matches the class' do
       expect(number_array.my_all?(Numeric)).to eql(true)
     end
 
-    it 'returns true if the all elements contains letter a' do 
+    it 'returns true if the all elements contains letter a' do
       expect(array.my_all?(/a/)).to eql(true)
     end
 
@@ -83,17 +95,16 @@ RSpec.describe Enumerable do
   end
 
   describe 'my_any?' do
-    
     it 'returns true if any elements are true with no block given' do
-    expect([false, nil, true, 8].my_any?).to be true
+      expect([false, nil, true, 8].my_any?).to be true
     end
 
     it 'returns false if none of the elements are true' do
-    expect(false_arr.my_any?).to be false
+      expect(false_arr.my_any?).to be false
     end
 
     it 'returns true if any of the elements are even numbers' do
-      expect(number_array.my_any? {|number| number.even?}).to be true
+      expect(number_array.my_any?(&:even?)).to be true
     end
 
     it 'returns true if any of the elements matches the class' do
@@ -109,24 +120,23 @@ RSpec.describe Enumerable do
     end
 
     it 'return false if nothing in the array matches with the block' do
-      expect(number_array.my_any? {|number| number > 5}).to be false
+      expect(number_array.my_any? { |number| number > 5 }).to be false
     end
   end
 
   describe '#my_none?' do
-
     it 'returns true if we do not have a block on an empty array' do
-        expect(arr.my_none?).to be true
+      expect(arr.my_none?).to be true
     end
 
     it 'returns a false if we only have false elements' do
-        expect(false_arr.my_none?).to be true
+      expect(false_arr.my_none?).to be true
     end
 
     it 'returns true if no elements match the block' do
-      expect(number_array.my_none? {|number| number > 5}).to be true
+      expect(number_array.my_none? { |number| number > 5 }).to be true
     end
-    
+
     it 'returns true if no elements are from the given class' do
       expect(array.my_none?(Numeric)).to be true
     end
@@ -136,49 +146,43 @@ RSpec.describe Enumerable do
     end
 
     it 'returns true if none of the elements matches the parameter' do
-      expect(['microverse', 'freecodecamp', 'odin_projects'].my_none?('codecademy')).to be true
+      expect(%w[microverse freecodecamp odin_projects].my_none?('codecademy')).to be true
     end
 
     it 'returns false if any of the elements matches the block' do
-      expect(number_array.my_none? {|number| number == 3}).to be false
+      expect(number_array.my_none? { |number| number == 3 }).to be false
     end
-
   end
 
   describe '#my_count' do
-
     it 'returns the counted numbers of the elements that are in the array' do
-      expect(number_array.my_count {|number| number +=1}).to eql(number_array.count {|number| number +=1})
+      expect(number_array.my_count { |number| number + 1 }).to eql(number_array.count { |number| number + 1 })
     end
 
     it 'returns the counted elements that same as the passing parameters' do
-      expect(['microverse','microverse','freecodecamp','codeacademy'].my_count('microverse')).to eql(2)
+      expect(%w[microverse microverse freecodecamp codeacademy].my_count('microverse')).to eql(2)
     end
-
   end
 
   describe '#my_map' do
-    
     it 'returns an exponential of each elements that are in array' do
-      expect(number_array.my_map {|number| number ** 2}).to eq(number_array.map {|number| number ** 2})
+      expect(number_array.my_map { |number| number**2 }).to eq(number_array.map { |number| number**2 })
     end
-    
+
     it 'returns the multiplication of each elements' do
-      expect((0..10).my_map {|number| number * number}).to eq((0..10).map {|number| number * number})
+      expect((0..10).my_map { |number| number * number }).to eq((0..10).map { |number| number * number })
     end
 
     it 'changes the word small to the word long' do
       animal = ['Small Cat', 'Small Dog', 'Small Bird']
       to_expect = ['Big Cat', 'Big Dog', 'Big Bird']
-      expect(animal.map {|animal| animal.gsub('Small', 'Big')}).to eq(to_expect)
+      expect(animal.map { |animals| animals.gsub('Small', 'Big') }).to eq(to_expect)
     end
-    
   end
 
   describe '#my_inject' do
-
     it 'returns the sum of all numbers in the array' do
-      expect(number_array.my_inject {|sum, number| sum + number}).to eq(10)
+      expect(number_array.my_inject { |sum, number| sum + number }).to eq(10)
     end
 
     it 'returns the longest word' do
@@ -187,7 +191,5 @@ RSpec.describe Enumerable do
       end
       expect(biggest_word).to eql('Watermelon')
     end
-
   end
-
 end
