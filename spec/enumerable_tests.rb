@@ -166,6 +166,28 @@ RSpec.describe Enumerable do
     it 'returns the multiplication of each elements' do
       expect((0..10).my_map {|number| number * number}).to eq((0..10).map {|number| number * number})
     end
+
+    it 'changes the word small to the word long' do
+      animal = ['Small Cat', 'Small Dog', 'Small Bird']
+      to_expect = ['Big Cat', 'Big Dog', 'Big Bird']
+      expect(animal.map {|animal| animal.gsub('Small', 'Big')}).to eq(to_expect)
+    end
     
   end
+
+  describe '#my_inject' do
+
+    it 'returns the sum of all numbers in the array' do
+      expect(number_array.my_inject {|sum, number| sum + number}).to eq(10)
+    end
+
+    it 'returns the longest word' do
+      biggest_word = array.my_inject do |word1, word2|
+        word1.length > word2.length ? word1 : word2
+      end
+      expect(biggest_word).to eql('Watermelon')
+    end
+
+  end
+
 end
