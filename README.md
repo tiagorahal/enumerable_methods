@@ -55,6 +55,11 @@ Run the following command into your terminal:
 ```console
 ruby enumerable.rb
 ```
+Run the following command into your terminal to check the Rspec testing:
+
+```console
+rspec spec/enumerable.rb
+```
 
 ## Authors
 
