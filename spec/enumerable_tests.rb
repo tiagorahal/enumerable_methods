@@ -81,4 +81,35 @@ RSpec.describe Enumerable do
       expect(['microverse'].my_all?('microverseschool')).to be false
     end
   end
+
+  describe 'my_any?' do
+    
+    it 'returns true if any elements are true with no block given' do
+    expect([false, nil, true, 8].my_any?).to be true
+    end
+
+    it 'returns false if none of the elements are true' do
+    expect(false_arr.my_any?).to be false
+    end
+
+    it 'returns true if any of the elements are even numbers' do
+      expect(number_array.my_any? {|number| number.even?}).to be true
+    end
+
+    it 'returns true if any of the elements matches the class' do
+      expect([1, 'word', false].my_any?(Numeric)).to be true
+    end
+
+    it 'return true if any of the elements contain the letter g' do
+      expect(array.my_any?(/g/)).to eql(true)
+    end
+
+    it 'return true if any of the elements matches the parameter' do
+      expect([true, 'microverse', array].my_any?('microverse')).to be true
+    end
+
+    it 'return false if nothing in the array matches with the block' do
+      expect(number_array.my_any? {|number| number > 5}).to be false
+    end
+  end
 end
