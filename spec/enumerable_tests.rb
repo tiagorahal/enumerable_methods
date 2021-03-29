@@ -1,11 +1,14 @@
 require_relative "../enumerable"
 
 RSpec.describe Enumerable do
-  let(:array) {%w[Apple Orange Watermelon Banana]}
+  let(:array) {%w[apple Orange Watermelon Banana]}
   let(:hash) {{fruit: 'banana', phone: 'apple'}}
   let(:number_array) {[1, 2, 3, 4]}
+  let(:arr) {[]}
+  let(:false_arr){[false]}
+  let(:true_arr){[1,3,5]}
 
-  describe 'my_each' do
+  describe '#my_each' do
 
     it 'returns the array' do
       expect(array.my_each {|fruit| fruit}).to eql(array)
@@ -37,14 +40,45 @@ RSpec.describe Enumerable do
     
   end
 
-  describe 'my_select' do
+  describe '#my_select' do
     
     it 'return elements that have 6 letters' do
       expect(array.my_select {|word| word if word.length == 6}).to eq(['Orange', 'Banana'])
     end
+
     it 'returns all the numbers divisible by 2' do
       expect(number_array.my_select {|number| number if number.even?}).to eq([2, 4])
     end
   end
 
+  describe '#my_all' do
+     
+    it 'returns true if we do not have a block' do
+    expect(arr.my_all?).to be true
+    end
+    
+    it 'returns a false if we do have a false element' do
+       expect(false_arr.my_all?).to be false
+    end
+    
+    it 'returns true if the all elements are odd numbers' do
+      expect(true_arr.my_all? {|number| number if number.odd?}).to be true
+    end
+
+    it 'return true if the all elements in the array matches the class' do
+      expect(number_array.my_all?(Numeric)).to eql(true)
+    end
+
+    it 'returns true if the all elements contains letter a' do 
+      expect(array.my_all?(/a/)).to eql(true)
+    end
+
+    it 'returns a true if the elements in the array matches with parameter' do
+      expect(['microverse'].my_all?('microverse')).to be true
+    end
+
+    it 'returns a false if the elements in the array does not matches with parameter' do
+      expect(['microverse'].my_all?('microverseschool')).to be false
+    end
+  end
 end
