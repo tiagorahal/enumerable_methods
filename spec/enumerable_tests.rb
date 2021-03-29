@@ -115,34 +115,32 @@ RSpec.describe Enumerable do
 
   describe '#my_none?' do
 
-    it 'returns true if we do not have a block' do
+    it 'returns true if we do not have a block on an empty array' do
         expect(arr.my_none?).to be true
-      end
+    end
 
-      it 'returns a false if we do have a false element' do
-        expect(false_arr.my_none?).to be false
-     end
-     
-     it 'returns true if the all elements are odd numbers' do
-       expect(true_arr.my_none?{|number| number if number.odd?}).to be true
-     end
- 
-     it 'return true if the all elements in the array matches the class' do
-       expect(number_array.my_none?(Numeric)).to eql(true)
-     end
- 
-     it 'returns true if the all elements contains letter a' do 
-       expect(array.my_none?(/a/)).to eql(true)
-     end
- 
-     it 'returns a true if the elements in the array matches with parameter' do
-       expect(['microverse'].my_none?('microverse')).to be true
-     end
- 
-     it 'returns a false if the elements in the array does not matches with parameter' do
-       expect(['microverse'].my_none?('microverseschool')).to be false
-     end
-   
-     
+    it 'returns a false if we only have false elements' do
+        expect(false_arr.my_none?).to be true
+    end
+
+    it 'returns true if no elements match the block' do
+      expect(number_array.my_none? {|number| number > 5}).to be true
+    end
+    
+    it 'returns true if no elements are from the given class' do
+      expect(array.my_none?(Numeric)).to be true
+    end
+
+    it 'return true if none of the elements contain the letter z' do
+      expect(array.my_none?(/z/)).to be true
+    end
+
+    it 'returns true if none of the elements matches the parameter' do
+      expect(['microverse', 'freecodecamp', 'odin_projects'].my_none?('codecademy')).to be true
+    end
+
+    it 'returns false if any of the elements matches the block' do
+      expect(number_array.my_none? {|number| number == 3}).to be false
+    end
   end
 end
