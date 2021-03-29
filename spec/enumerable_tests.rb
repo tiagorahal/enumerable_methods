@@ -131,7 +131,7 @@ RSpec.describe Enumerable do
       expect(array.my_none?(Numeric)).to be true
     end
 
-    it 'return true if none of the elements contain the letter z' do
+    it 'returns true if none of the elements contain the letter z' do
       expect(array.my_none?(/z/)).to be true
     end
 
@@ -142,5 +142,18 @@ RSpec.describe Enumerable do
     it 'returns false if any of the elements matches the block' do
       expect(number_array.my_none? {|number| number == 3}).to be false
     end
+
+  end
+
+  describe '#my_count' do
+
+    it 'returns the counted numbers of the elements that are in the array' do
+      expect(number_array.my_count {|number| number +=1}).to eql(number_array.count {|number| number +=1})
+    end
+
+    it 'returns the counted elements that same as the passing parameters' do
+      expect(['microverse','microverse','freecodecamp','codeacademy'].my_count('microverse')).to eql(2)
+    end
+
   end
 end
