@@ -29,12 +29,22 @@ RSpec.describe Enumerable do
 
     it 'return all elements that are even index' do
      expect(number_array.my_each_with_index {|number, index| number if index % 2 == 0}).to eql(number_array.each_with_index{|number, index| number if index % 2 == 0})
-  end
+    end
     
     it 'return hash if an index for key is 1' do
     expect(hash.my_each_with_index {|hash, index| hash if index ==  1}).to eql(hash.each_with_index {|hash, index| hash if index ==  1})
     end
     
-end
+  end
+
+  describe 'my_select' do
+    
+    it 'return elements that have 6 letters' do
+      expect(array.my_select {|word| word if word.length == 6}).to eq(['Orange', 'Banana'])
+    end
+    it 'returns all the numbers divisible by 2' do
+      expect(number_array.my_select {|number| number if number.even?}).to eq([2, 4])
+    end
+  end
 
 end
