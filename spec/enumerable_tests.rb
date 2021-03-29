@@ -156,4 +156,16 @@ RSpec.describe Enumerable do
     end
 
   end
+
+  describe '#my_map' do
+    
+    it 'returns an exponential of each elements that are in array' do
+      expect(number_array.my_map {|number| number ** 2}).to eq(number_array.map {|number| number ** 2})
+    end
+    
+    it 'returns the multiplication of each elements' do
+      expect((0..10).my_map {|number| number * number}).to eq((0..10).map {|number| number * number})
+    end
+    
+  end
 end
