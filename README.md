@@ -3,7 +3,7 @@
 
 ## enumerable_methods
 
-> A collaborative project to build user defined ruby's enumerable methods
+> A collaborative project to build user defined ruby's enumerable methods and tests with Rspec
 
 
 
@@ -48,6 +48,12 @@ Run the following command into your terminal:
 ruby enumerable.rb
 ```
 
+Run the following command into your terminal to run the test:
+
+```console
+rspec
+```
+
 ## Authors
 
 👤 **NSABIMANA Emmanuel**
@@ -61,6 +67,12 @@ ruby enumerable.rb
 - GitHub: [@tiagorahal](https://github.com/tiagorahal)
 - Twitter: [@RahalAires](https://twitter.com/RahalAires)
 - LinkedIn: [Tiago Rahal Aires](https://linkedin.com/tiagorahal)
+
+👤 **Francis Uloko**
+
+- GitHub: [@francisuloko](https://github.com/francisuloko)
+- Twitter: [@FrancisUloko](https://twitter.com/FrancisUloko)
+- LinkedIn: [Francis Uloko
 
 ## 🤝 Contributing
 
